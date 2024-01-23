@@ -20,7 +20,15 @@ class Venda extends Model
 
     public function itensVenda()
     {
-    	return $this->hasMany(ItemVenda::class);
+    	// return $this->hasMany(ItemVenda::class, 'item_vendas');        // n para n (inverso)
+        return $this->hasMany(ItemVenda::class, 'venda_id');
+    }
+    public function itensVendaU()
+    {
+        return $this->belongsToMany(Produto::class, 'item_vendas')
+            ->withPivot('venda_id')
+            ->withPivot('created_at')
+            ->withPivot('updated_at');
     }
 
     public function cliente()

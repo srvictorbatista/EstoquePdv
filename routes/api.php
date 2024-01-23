@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\VendaController;
+use App\Http\Controllers\ItemVendaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,11 @@ Route::delete('cat', 		[CategoriaController::class, 	'index']);
 
 Route::get('vend', 			[VendaController::class, 	'index']);
 Route::post('vend', 		[VendaController::class, 	'store']);
+Route::get('vend/{id}', 	[VendaController::class, 	'show']);
+Route::put('vend/{id}', 	[VendaController::class, 	'update']);
+Route::put('vend/', 		[ProdutoController::class, 	'index']);
+
+
+Route::get('iven', 			[ItemVendaController::class, 	'index']);
+Route::post('iven', 		[ItemVendaController::class, 	'store']);
 

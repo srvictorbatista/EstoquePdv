@@ -22,13 +22,17 @@ class ProdutoController extends Controller
      */
     public function store(ProdutoRequest $request)
     {
-        $produto = Produto::create($request->validated());
+        // $produto = Produto::create($request->validated());
+        $produto = $request->validated();
+        $produto['preco'] = floatval(str_replace(",", ".", preg_replace("/[^0-9.,]/", "", $produto['preco'])));
+        $produto = Produto::create($produto);
+
         if ($request->has('categoria_id')){
             foreach ($request->input('categoria_id') as $categoria_id) {
                 $produto->categorias()->attach($categoria_id);                
             }
         }
-        // $produto->categorias()->attach($request->input('categoria_id'));
+
         return response()->json(['message'=>'inserido com sucesso', new ProdutoResource($produto)], 202);
     }
     /**

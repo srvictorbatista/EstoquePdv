@@ -21,7 +21,7 @@ class Produto extends Model
 
     public function categoria()
     {
-    	return $this->belongsTo(Categoria::class); 								// 1 pra 1 (inverso)
+    	return $this->belongsTo(Categoria::class); 								        // 1 pra 1 (inverso)
     }
 
     public function categorias()
@@ -31,12 +31,13 @@ class Produto extends Model
 
     public function itensVenda()
     {
-    	return $this->hasMany(ItemVenda::class); 								// 1 para n
+    	// return $this->hasMany(ItemVenda::class); 		                		        // 1 para n
+        return $this->hasMany(ItemVenda::class, 'produto_id');
     }
 
     public function itensCompra()
     {
-    	return $this->hasMany(ItemCompra::class); 								//  1 para n
+    	return $this->hasMany(ItemCompra::class); 								        //  1 para n
     }
 }
 
