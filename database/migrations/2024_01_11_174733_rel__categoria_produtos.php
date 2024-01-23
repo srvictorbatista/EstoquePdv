@@ -16,10 +16,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('categoria_id');
             $table->unsignedBigInteger('produto_id');
-            $table->timestamps();
     
             $table->foreign('categoria_id')->references('id')->on('categorias');
             $table->foreign('produto_id')->references('id')->on('produtos');
+            
+            $table->timestamps();
             
         });
     }
