@@ -18,13 +18,29 @@ class VendaResource extends JsonResource
         	'id'			 => $this->id,
         	'data'			 => $this->data,
         	'total'			 => $this->total,
-        	// 'produtos_id'	 => VendaResource::collection($this->produtos_id),
-        	// 'produto_id' 	 => $this->produto_id,
-            'produto_id'     => 'array',
-            'quantidade'     => 'array',
-            'preco_unitario' => 'array',
-        	'created_at' 	 => $this->created_at,
-        	'updated_at'	 => $this->updated_at,
+            //'produto_id'     => 'array',
+            //'quantidade'     => 'array',
+            //'preco_unitario' => 'array',
+	        'itens'    => $this->itensVenda->map(function($itemVenda){
+	            return [
+	            	'nome'        	 => $itemVenda->produto->nome,
+	            	'descricao'  	 => $itemVenda->produto->descricao,
+	                'produto_id'     => $itemVenda->produto_id,
+	                'quantidade'     => $itemVenda->quantidade,
+	                'preco_unitario' => $itemVenda->preco_unitario,
+	                'subtotal'		 => $itemVenda->subtotal,
+	                /* relacao de itens no estoque (tabela produtos)
+	                'produto'        => [
+	                    'id'          => $itemVenda->produto->id,
+	                    'nome'        => $itemVenda->produto->nome,
+	                    'descricao'   => $itemVenda->produto->descricao,
+	                    'preco'   	  => $itemVenda->produto->preco,
+	                    'quantidade_em_estoque'   => $itemVenda->produto->quantidade_em_estoque
+	                ],/**/
+	            ];
+	        }),
+        	// 'created_at' 	 => $this->created_at,
+        	// 'updated_at'	 => $this->updated_at,
         ];
     }
 }
