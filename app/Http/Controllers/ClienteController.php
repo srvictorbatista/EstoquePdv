@@ -205,8 +205,27 @@ class ClienteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
-        //
+        try {
+            $cliente = Cliente::findOrFail($id);
+
+            /*
+            // Verifica se o cliente possui vendas associadas
+            if ($cliente->vendas()->exists()) {
+                return response()->json(['error' => 'Erro: Este cliente possui vendas associadas e não pode ser excluído.'], 423); exit();
+            }/**/
+
+            // Exclui o cliente
+            $cliente->delete();
+
+            $nome = $cliente['nome'];
+
+            return response()->json(['message' => "Cliente \"{$nome}\" foi excluído com sucesso."], 202);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Erro: Cliente não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro generalizado na operação.'], 500);
+        }
     }
 }

@@ -56,4 +56,5 @@ Route::get('clie', 			[ClienteController::class, 	'index']);
 Route::post('clie', 		[ClienteController::class, 	'store']);
 Route::get('clie/{id}', 	[ClienteController::class, 	'show']);
 Route::put('clie/{id}', 	[ClienteController::class, 	'update']);
+Route::delete('clie/{id}', 	[ClienteController::class, 	'destroy']);
 
