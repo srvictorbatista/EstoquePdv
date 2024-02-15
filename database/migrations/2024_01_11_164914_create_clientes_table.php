@@ -30,7 +30,7 @@ return new class extends Migration
         Cliente::create([
             'id' => '0',
             'nome' => 'CLIENTE PADRÃO',
-            'cpf' => '00000000000',
+            'cpf' => null,
             'email' => null,
             'telefone' => null,
             'endereco' => null,

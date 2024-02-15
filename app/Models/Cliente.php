@@ -20,6 +20,16 @@ class Cliente extends Model
         return $this->hasMany(Venda::class);
     }
 
+    public function vendas()
+    {
+        return $this->belongsToMany(Venda::class, 'rel_venda_cliente', 'cliente_id', 'venda_id');
+    }
+
+    public function relVendaCliente()
+	{
+	    return $this->belongsToMany(Venda::class, 'rel_venda_cliente', 'cliente_id', 'venda_id');
+	}
+
     //* Padroniza data no modelo (fusorario)
     public function toArray()
     {

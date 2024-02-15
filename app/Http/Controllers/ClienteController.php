@@ -12,6 +12,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 
+use Illuminate\Support\Facades\DB;
+
 
 
 class ClienteController extends Controller
@@ -31,8 +33,6 @@ class ClienteController extends Controller
      */
     public function store(StoreClienteRequest $request)
     {     
-        
-
         try {
             // Sanitiza o campo CPF para conter apenas números
             $cpf = preg_replace("/[^0-9]/", "", $request->input('cpf'));

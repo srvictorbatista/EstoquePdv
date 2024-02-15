@@ -16,12 +16,20 @@ class VendaResource extends JsonResource
     {
         return [        	
         	'id'			 => $this->id,
+            'cliente' 		 => $this->relVendaCliente->map(function ($cliente) {
+                return [
+                    'cliente_id' => $cliente->id,
+                    'nome'       => $cliente->nome,
+                    'cpf'        => $cliente->cpf,
+                    'telefone'   => $cliente->telefone,
+                    'endereco'   => $cliente->endereco,
+                    'bairro'     => $cliente->bairro,
+                    'cidade'     => $cliente->cidade,
+                ];
+            }),
         	'data'			 => $this->data,
         	'total'			 => $this->total,
-            //'produto_id'     => 'array',
-            //'quantidade'     => 'array',
-            //'preco_unitario' => 'array',
-	        'itens'    => $this->itensVenda->map(function($itemVenda){
+	        'itens'    		 => $this->itensVenda->map(function($itemVenda){
 	            return [
 	            	'nome'        	 => $itemVenda->produto->nome,
 	            	'descricao'  	 => $itemVenda->produto->descricao,

@@ -31,8 +31,14 @@ class Venda extends Model
             ->withPivot('updated_at');
     }
 
-    public function cliente()
+    public function clientes()
     {
-    	return $this->belongsTo(Cliente::class);
+        return $this->belongsToMany(Cliente::class, 'rel_venda_cliente', 'venda_id', 'cliente_id')->withTimestamps();
+    }
+
+    public function relVendaCliente()
+    {
+        // return $this->hasMany(RelVendaCliente::class);
+        return $this->belongsToMany(Cliente::class, 'rel_venda_cliente', 'venda_id', 'cliente_id')->withTimestamps();
     }
 }

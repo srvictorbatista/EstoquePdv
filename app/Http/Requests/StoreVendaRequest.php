@@ -23,6 +23,7 @@ class StoreVendaRequest extends FormRequest
     {
         return [
            'data'           => 'nullable|sometimes|date|min:3',
+           'cliente_id'     => 'array',
            'total'          => 'string|min:0',
            'produto_id'     => 'array',
            'quantidade'     => 'array',

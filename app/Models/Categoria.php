@@ -18,6 +18,6 @@ class Categoria extends Model
 
     public function produtos()
     {
-    	return $this->hasMany(Categoria::class); 
+    	return $this->hasMany(Categoria::class)->withTimestamps(); 
     }
 }
