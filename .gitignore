@@ -20,4 +20,4 @@ yarn-error.log
 _START.CMD
 _RESTORE_BKP.CMD
 NOTAS.txt
-/database/seeders/BKP_Teste_Seeder.php
+#/database/seeders/BKP_Teste_Seeder.php
