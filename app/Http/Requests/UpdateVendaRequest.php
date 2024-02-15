@@ -22,8 +22,9 @@ class UpdateVendaRequest extends FormRequest
     public function rules(): array
     {
         return [
-           'data' => 'string|min:3',
-           'total' => 'string|min:0',
+           'cliente_id'     => 'array',
+           'data'           => 'string|min:3',
+           'total'          => 'string|min:0',
            'produto_id'     => 'array',
            'quantidade'     => 'array',
            'preco_unitario' => 'array',

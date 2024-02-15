@@ -17,5 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-START.CMD
+_START.CMD
+_RESTORE_BKP.CMD
 NOTAS.txt
+/database/seeders/BKP_Teste_Seeder.php
