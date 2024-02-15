@@ -106,7 +106,7 @@ class BKP_Teste_Seeder extends Seeder
 			['nome' => 'Peixes e Mariscos'],
 			['nome' => 'Padaria e lanchonete'],
 			['nome' => 'Cereais, Molhos e Massas'],
-			['nome' => 'Higiene e Beleza'],
+			['nome' => 'Higiene, Cosmeticos e Beleza'],
 			['nome' => 'Descartaveis e Festas'],
 			['nome' => 'Ferragens e Utilidades para o Lar'],
         ]);
