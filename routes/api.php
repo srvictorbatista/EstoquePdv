@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\VendaController;
 use App\Http\Controllers\ItemVendaController;
 use App\Http\Controllers\CLienteController;
+use App\Http\Controllers\FornecedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +50,6 @@ Route::delete('vend/{id}', 	[VendaController::class, 	'destroy']);
 
 Route::get('iven', 			[ItemVendaController::class, 	'index']);
 Route::post('iven', 		[ItemVendaController::class, 	'store']);
-// Route::post('iven/{id}', 	[ItemVendaController::class, 	'store']);
 
 
 Route::get('clie', 			[ClienteController::class, 	'index']);
@@ -57,4 +57,12 @@ Route::post('clie', 		[ClienteController::class, 	'store']);
 Route::get('clie/{id}', 	[ClienteController::class, 	'show']);
 Route::put('clie/{id}', 	[ClienteController::class, 	'update']);
 Route::delete('clie/{id}', 	[ClienteController::class, 	'destroy']);
+
+
+Route::get('forn', 			[FornecedorController::class, 	'index']);
+Route::post('forn', 		[FornecedorController::class, 	'store']);
+Route::get('forn/{id}', 	[FornecedorController::class, 	'show']);
+// Route::resource('fornecedores', FornecedorController::class);
+Route::put('forn/{id}', 	[FornecedorController::class, 	'update']);
+Route::delete('forn/{id}', 	[FornecedorController::class, 	'destroy']);
 

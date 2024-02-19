@@ -39,6 +39,15 @@ class Produto extends Model
     {
     	return $this->hasMany(ItemCompra::class); 								        //  1 para n
     }
+
+    //-- ---------------------------------
+    
+    public function relProdutoCompras()
+    {
+        return $this->belongsToMany(Compra::class, 'rel_compra_produto')
+            ->withPivot('quantidade', 'preco_unitario')
+            ->withTimestamps();
+    }
 }
 
 

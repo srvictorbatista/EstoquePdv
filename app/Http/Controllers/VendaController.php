@@ -13,20 +13,6 @@ use App\Http\Resources\VendaResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-/*
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Models\Venda;
-use App\Models\Produto;
-// use App\Models\ItemVenda;
-use App\Http\Requests\StoreVendaRequest;
-use App\Http\Requests\UpdateVendaRequest;
-use App\Http\Resources\VendaResource;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-/**/
-
 class VendaController extends Controller
 {
     /**
@@ -103,8 +89,6 @@ class VendaController extends Controller
                 for ($i = 0; $i < count($dados_venda['cliente_id']); $i++) {
                     // associa o ID informado ao cliente
                     $cliente_obj = Cliente::find($dados_venda['cliente_id'][$i]);
-                    // $dados_venda['cliente_nome'][] = $cliente['nome'];
-                    // $dados_venda['cliente_cpf']
 
                     $cliente[] = [
                         'id' => $cliente_obj['id'],
@@ -206,10 +190,8 @@ class VendaController extends Controller
                     $hor_venda = $data_venda->format('H');
                     $min_venda = $data_venda->format('i');
                     $seg_venda = $data_venda->format('s');
-                    // echo "MOMENTO DA VENDA: '{$dia_venda}/{$mes_venda}/{$ano_venda} - {$hor_venda}:{$min_venda}:{$seg_venda}',\n";
                 }
             $venda->data = $data_venda->format('Y-m-d H:i:s');
-            // echo "eee: '".$data_venda->format('d/m/Y - H:i:s')."'";
 
                 $vendaData[] = [
                     'id'            => $venda->id,
@@ -219,9 +201,6 @@ class VendaController extends Controller
                     'itens'         => $itensVenda,
                 ];
 
-
-            // Retorna a resposta
-            // return response()->json(['message' => 'Inserido com sucesso', 'venda' => $dados_venda], 202);
             return response()->json(['message' => 'Venda registrada com sucesso', 'venda' => $vendaData], 202);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Erro: Cliente ou Produto não encontrado'], 404);

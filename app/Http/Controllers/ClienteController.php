@@ -63,7 +63,7 @@ class ClienteController extends Controller
 
                 // Comparação do dígito com o CPF enviado
                 if ($DV1 != $cpf[9] || $DV2 != $cpf[10]) {
-                    return response()->json(['error' => 'Erro cpf inválido'], 422); exit();
+                    return response()->json(['error' => 'Erro cpf inválido'], 423); exit();
                 }
                 //////////////////////////////////////////////////////////
             }
@@ -213,7 +213,7 @@ class ClienteController extends Controller
             /*
             // Verifica se o cliente possui vendas associadas
             if ($cliente->vendas()->exists()) {
-                return response()->json(['error' => 'Erro: Este cliente possui vendas associadas e não pode ser excluído.'], 423); exit();
+                return response()->json(['error' => 'Erro: Este cliente possui vendas associadas e por isso, não pode ser excluído.'], 423); exit();
             }/**/
 
             // Exclui o cliente

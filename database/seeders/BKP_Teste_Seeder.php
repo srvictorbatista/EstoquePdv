@@ -7,15 +7,125 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 //*
-function endDetail(){
-	$Detalhe = ' nº '.str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT).' '.(rand(0, 4) ? '' : '- '.chr(rand(65, 71)));
 
+
+
+// Funções para gerar dados aleatórios
+function removerAcentos($string) {
+    // Remove acentos
+    $stringSemAcento = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+    // Remove caracteres especiais
+    $stringSemEspeciais = preg_replace('/[^a-zA-Z0-9]/', '', $stringSemAcento);
+    return $stringSemEspeciais;
+}
+
+
+function gerarNomeAleatorio() {
+    $nomes = [
+    	'ABC', 'BRAS', 'National', 'Marcos', 'Eficiente', 'Angelica', 'Total', 'GenteInteli', 'Veloz', 'BetoÁgil', 'RapidLog', 'Brasileirissima', 'A3', 'Rápida', 'Central', 'Velocidade', 'Águia', 'Segura', 'SulLog', 'DuNorte', 'Amazônense', 'Certa', 'SENEX', 'Pratica', 'Servisa', 'VIP', 'Cerrado', 'Mercosul', 'Garantida', 'Global', 'Valencia', 'Sul', 'Apeú', 'Amiga', 'Panamericana', 'Máxima', 'Ultra', 'Alpha', 'Beta', 'Gama', 'Delta', 'Omega', 'Sigmund', 'Reta', 'Primus', 'Marcone', 'Vitoria', 'O Sorvetão', 'Goiano'];
+
+    $tipo = ['& Corp', 'S.A', 'Ltda', 'Comércio', 'Distribuidora', 'Suprimentos', 'Rápido', 'Atacado', 'Entregas', 'Expresso', 'Transportadora', 'Logística', 'Distribuição', 'Motors', 'Veiculos', 'Express', 'Produtos', '24 Horas', 'Transporte', 'Cargas', 'Log', '& Cia', 'Expressos'];
+
+    $nome = $nomes[array_rand($nomes)] . ' ' . $tipo[array_rand($tipo)];
+    return $nome;
+}
+
+
+function gerarCNPJAleatorio() {
+    $cnpj = '';
+    for ($i = 0; $i < 14; $i++) {
+        $cnpj .= mt_rand(0, 9);
+    }
+    return $cnpj;
+}
+
+function gerarEmailAleatorio($nome='') {
+	$nome = removerAcentos($nome ? $nome : $nome=gerarNomeAleatorio());
+
+    $dominios = ['gmail.com', 'yahoo.com', 'uol.com', 'mail.com'];
+    $departamentos = ['contato', 'vendas', 'comercial', 'pedidos', 'atendimento', 'gestaocomercial', 'relacionamentocliente', 'fale', 'planejamentovendas', 'televendas', 'varejo', 'atacado', 'mercadologia', 'expansaomercado', 'trade', 'inteligenciamercado', 'vendasonline', 'estrategiasvendas', 'negocios', 'comercioexterno', 'gerenciamentovendas', 'comerciointeligente', 'vendasdiretas', 'treinamentovendas', 'analisedemercado', 'vendasglobais', 'canaisdevendas', 'vendasestrategicas', 'vendasdigitais', 'operacoesvendas', 'vendasfuturas', 'suportevendas', 'vendasregionais', 'logisticavendas', 'parceriascomerciais', 'consultoriacomercial', 'negociacaocomercial', 'inovacaovendas', 'equipecomercial', 'captacaonovosclientes', 'vendaslocais', 'expansao', 'ofertacomercial', 'comercializacao', 'vendasproativas', 'relacionamentoparcerias', 'vendasexternas', 'vendasvarejistas', 'prospectovendas', 'expansaocomercial', 'analisevendas', 'vendasb2b', 'vendasb2c', 'mercadovendas', 'tecnologiavendas', 'supervisaocomercial', 'gerenciamentoparcerias', 'vendasvolumosas', 'desenvolvimentocomercial', 'vendasconcorrencia', 'estrategiacomercial', 'vendasinteligentes', 'liderancacomercial', 'novosnegocios'];
+
+    $email = empty($nome) ? $departamentos[array_rand($departamentos)]."@$nome.com" : $departamentos[array_rand($departamentos)].'.' . $nome . '@' . $dominios[array_rand($dominios)];
+    return strtolower($email);
+}
+
+function gerarTelefoneAleatorio() {
+    $telefone =  '('.mt_rand(11, 99).') ';
+    $telefone .= mt_rand(1000, 9999) . '-' . mt_rand(1000, 9999);
+    return $telefone;
+}
+
+function gerarEnderecoAleatorio() {
+    $enderecos = [
+    //*
+    'Rua das Rosas', 'Rua Quintino B.', 'Rua Rota do Mar', 'Rua Victor Batista', 'Rua Paraiso',
+    'Avenida Principal', 'Avenida Hyroshi Yamada', 'Avenida Viletta',
+    'Alameda Alphandegah', 'Alameda Beatriz Flores', 'Alameda Gamma Abreu',
+    'Praça Central', 'Praça das Moças', 'Praça do Comércio',
+    'Largo da Paz', 'Largo do Centro', 'Largo da Amizade',
+    'Travessa da Sorte', 'Travessa do Sol', 'Travessa da Lua',
+    'Estrada da Montanha', 'Estrada do Vale', 'Estrada da Serra',
+    'Beco das Almas', 'Beco Sossego', 'Beco do Silêncio',
+    'Rodovia Veloz', 'Rodovia Expressa', 'Rodovia do Progresso',
+    'Ladeira do Comerciário', 'Ladeira da Carolina', 'Ladeira da Leitura',
+    'Passagem Tulipa', 'Passagem Flávia Maria', 'Passagem Rozangela P.',
+    'Campo dos Matias', 'Fazenda Paraiso', 'Bosque da Liberdade',
+    'Pátio das Borboletas', 'Pátio dos Pássaros', 'Pátio das Virgens',
+    'Bulevar das Rosas', 'Bulevar das Orquídeas', 'Bulevar das Tulipas',
+    'Elevado das Nuvens', 'Elevado das Estrelas', 'Elevado do Céu',
+    'Passarela da Amizade', 'Passarela do Sucesso', 'Passarela da Harmonia',
+    'Vereda das Solteiras', 'Vereda da Esperança', 'Vereda do Amor',
+    'Vila do Bosque', 'Vila das Árvores', 'Vila do Riacho',/**/ 
+    //*   
+    'Condomínio Industrial, Av Tavares Souza', 'Condomínio Primavera, Av. Paraiso', 'Condomínio Arterial, Rua Violeta Maria', 'Condomínio Major Souza, R. Brigadeiro Rocha', 'Condomínio Ruy Pereira I, Av Vic Press J. Alencar', 'Condomínio Ruy Pereira II, Rua Sto Antonio', 'Condomínio Arantes, Travessa Três','Condomínio Vilas Boas II, Rua Cloves Algusto',
+    'Mirante do Sol', 'Mirante da Lua', 'Mirante das Estrelas', 'Torre das Rocas', 'Torre da Alegria', 'Torre da Serenidade',
+    'Conjunto da Harmonia, Rua Cezar VIlar', 'Conjunto das Cores, Av. Rufino Jr.', 'Conjunto do Encanto, Av. Liberdade', 'Conjunto Orlando Lobato, Av. Alg. Montenegro',/**/
+];
+    return gerarEndDetail($enderecos[array_rand($enderecos)]);
+}
+
+function gerarEndDetail($logradouro=''){
+	$Detalhe = ' nº '.str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT).' '.(rand(0, 4) ? '' : '- '.chr(rand(65, 71)));
 	$Detalhe = str_replace(' - E', ', Bloco '.str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT).', Ap '.str_pad(mt_rand(100, 999), 4, '0', STR_PAD_LEFT).'-A', $Detalhe);
 	$Detalhe = str_replace(' - F', ', Bloco '.str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT).', Ap '.str_pad(mt_rand(100, 999), 4, '0', STR_PAD_LEFT).'-B', $Detalhe);
 	$Detalhe = str_replace('- G', ', 2º andar', $Detalhe);
 	$Detalhe = str_replace('- H', ' (fundos)', $Detalhe);
-	return $Detalhe;
-}/**/
+
+	$cond = ', Bloco '.str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT).', Ap '.str_pad(mt_rand(100, 999), 4, '0', STR_PAD_LEFT).'-A';
+	$conj = ', Qua. '.str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT).', Cas. '.str_pad(mt_rand(100, 999), 4, '0', STR_PAD_LEFT);
+	$Bule = ', '.str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT).'º Piso';
+	$logradouro .= (preg_match('/condomínio|Mirante/i', $logradouro) ? $cond : $Detalhe);
+	$logradouro = (preg_match('/Conjunto/i', $logradouro) ? trim($logradouro).$conj : $logradouro);
+	$logradouro = (preg_match('/Bulevar|Torre/i', $logradouro) ? trim($logradouro).$Bule : $logradouro);
+
+	return $logradouro;
+}
+
+function gerarBairroAleatorio() {
+    $bairros = ['Centro', 'PraiaFormosa', 'Mangabeira', 'BoaViagem', 'Piedade', 'Candeias', 'Tambau', 'JardimOceania', 'Parnamirim', 'Aldeota', 'Meireles', 'Cocotá', 'Itapuã', 'CaboBranco', 'Bessa', 'Manaíra', 'Barra', 'Cambeba', 'CristoRedentor', 'Capela', 'Maraponga', 'LagoaRedonda', 'Benfica', 'Guararapes', 'CasaForte', 'Imbiribeira', 'AltoJoséBonifácio', 'Petrópolis', 'JardimAmérica', 'Pina', 'CidadeDosFuncionários', 'Guararapes', 'CidadeNova', 'Joaquina', 'Grageru', 'Centro', 'PraiaDaCosta', 'Piedade', 'Ribeira', 'Tibiri', 'Camurupim', 'CapimMacio', 'Alecrim', 'AreiaPreta', 'Candelária', 'CidadeAlta', 'LagoaNova', 'Neópolis', 'Pitimbu', 'Planalto', 'PontaNegra', 'Quintas', 'Redinha', 'Rocas', 'Tirol', 'Liberdade', 'BairroNovo', 'BoaEsperança', 'BomSucesso', 'CasaCaiada', 'CaixaD´Agua', 'Cajueiro', 'Candeias', 'Carmo', 'Centro', 'CidadeAlta', 'CidadeNova', 'Cohab', 'ConjuntoPanatis', 'FelipeCamarão', 'Guarapes', 'Igapó', 'Jiqui', 'LagoaSeca', 'LagoaNova', 'MãeLuiza', 'NossaSenhoraDaApresentação', 'NossaSenhoraDeNazareth', 'NovaDescoberta', 'Nordeste', 'Pajuçara', 'Petrópolis', 'Pitimbu', 'Planalto', 'PontaNegra', 'Potengi', 'PraiaDoMeio', 'Quintas', 'Redinha', 'Ribeira', 'RioBraga', 'Rocas', 'SantosReis', 'SãoGeraldo', 'Tirol', 'Varzea', 'Viagem'];
+
+    return $bairros[array_rand($bairros)];
+}
+
+function gerarCEPAleatorio() {
+    $cep = '';
+    for ($i = 0; $i < 8; $i++) {
+    	//$a = $i=6 ? '-' : '';
+        $cep .= $i==4 ?  mt_rand(0, 9).'-' : mt_rand(0, 9);
+    }
+    return $cep;
+}
+
+function gerarCidadeAleatoria(){
+	$cidadesBrasileiras = ['São Paulo - SP', 'Rio de Janeiro - RJ', 'Belo Horizonte - MG', 'Porto Alegre - RS', 'Salvador - BA', 'Fortaleza - CE', 'Recife - PE', 'Curitiba - PR', 'Brasília - DF', 'Manaus - AM', 'Belém - PA', 'Vitória - ES', 'Goiânia - GO', 'João Pessoa - PB', 'São Luís - MA', 'Campo Grande - MS', 'Cuiabá - MT', 'Florianópolis - SC', 'Teresina - PI', 'Natal - RN', 'Aracaju - SE', 'Maceió - AL', 'Palmas - TO', 'Boa Vista - RR', 'Rio Branco - AC', 'Macapá - AP', 'Porto Velho - RO', 'Caxias do Sul - RS', 'Campos dos Goytacazes - RJ', 'Maringá - PR', 'Paulista - PE', 'Limeira - SP', 'São José dos Campos - SP', 'Uberlândia - MG', 'Jundiaí - SP', 'Feira de Santana - BA', 'Anápolis - GO', 'Petrópolis - RJ', 'Viamão - RS', 'Montes Claros - MG', 'Ponta Grossa - PR', 'Itaquaquecetuba - SP', 'Praia Grande - SP', 'Cabo de Santo Agostinho - PE', 'Governador Valadares - MG', 'Camaçari - BA', 'São Vicente - SP', 'Piracicaba - SP', 'Santarém - PA', 'Guarujá - SP', 'Pelotas - RS', 'Floriano - PI', 'Barra Mansa - RJ', 'Santa Maria - RS', 'Divinópolis - MG', 'Sete Lagoas - MG', 'Araraquara - SP', 'Itabira - MG', 'Patrocínio - MG', 'Paracatu - MG', 'São João del Rei - MG', 'Campo Belo - MG', 'Ouro Preto - MG', 'São Lourenço - MG', 'Conselheiro Lafaiete - MG', 'Iguatu - CE', 'Itabaiana - SE', 'Ceres - GO', 'São Miguel do Araguaia - GO', 'Niquelândia - GO'];
+	return $cidadesBrasileiras[array_rand($cidadesBrasileiras)];
+}
+
+
+
+
+
+
 
 class BKP_Teste_Seeder extends Seeder
 {
@@ -42,60 +152,60 @@ class BKP_Teste_Seeder extends Seeder
 
         // Inserir dados na tabela 'clientes'
         DB::table('clientes')->insert([
-        	['nome' => 'João Müller Schmidt', 'cpf' => '78420702021', 'email' => 'joao.schmidt@sistemapdv.com', 'telefone' => '(11) 98765-4321', 'endereco' => 'Rua das Moças'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'São Paulo', 'cep' => '01000-000', 'map' => '-23.5505,-46.6333', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Maria Schneider Fischer', 'cpf' => '98102323060', 'email' => 'maria.fischer@sistemapdv.com', 'telefone' => '(21) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Copacabana', 'cidade' => 'Rio de Janeiro', 'cep' => '22000-000', 'map' => '-22.9739,-43.1857', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'José Weber Meyer', 'cpf' => '05848809011', 'email' => 'jose.meyer@sistemapdv.com', 'telefone' => '(51) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Porto Alegre', 'cep' => '90000-000', 'map' => '-30.0330,-51.2300', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Ana Wagner Becker', 'cpf' => '38702929031', 'email' => 'ana.becker@sistemapdv.com', 'telefone' => '(41) 98765-4321', 'endereco' => 'Avenida das Begônias'.endDetail(), 'bairro' => 'Batel', 'cidade' => 'Curitiba', 'cep' => '80000-000', 'map' => '-25.4322,-49.2722', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Francisco Hoffmann Schäfer', 'cpf' => '22288198087', 'email' => 'francisco.schaefer@sistemapdv.com', 'telefone' => '(48) 98765-4321', 'endereco' => 'Rua das Rosas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Florianópolis', 'cep' => '88000-000', 'map' => '-27.5954,-48.5480', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Paula Koch Richter', 'cpf' => '59766500070', 'email' => 'paula.richter@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Luiz Bauer Klein', 'cpf' => '49217402087', 'email' => 'luiz.klein@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Rua das Violetas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Carla Wolf Neumann', 'cpf' => '61400535018', 'email' => 'carla.neumann@sistemapdv.com', 'telefone' => '(31) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.endDetail(), 'bairro' => 'Savassi', 'cidade' => 'Belo Horizonte', 'cep' => '30000-000', 'map' => '-19.9386,-43.9379', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Antonio Schwarz Zimmermann', 'cpf' => '97961788000', 'email' => 'antonio.zimmermann@sistemapdv.com', 'telefone' => '(61) 98765-4321', 'endereco' => 'Rua das Orquídeas'.endDetail(), 'bairro' => 'Asa Sul', 'cidade' => 'Brasília', 'cep' => '70000-000', 'map' => '-15.7936,-47.8825', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Renata Braun Schmitt', 'cpf' => '90110695011', 'email' => 'renata.schmitt@sistemapdv.com', 'telefone' => '(67) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Campo Grande', 'cep' => '79000-000', 'map' => '-20.4509,-54.6163', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Pedro Lange Schmitz', 'cpf' => '02383090026', 'email' => 'pedro.schmitz@sistemapdv.com', 'telefone' => '(24) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Petrópolis', 'cep' => '25600-000', 'map' => '-22.5100,-43.1808', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Camila Krüger Schulz', 'cpf' => '22672529027', 'email' => 'camila.schulz@sistemapdv.com', 'telefone' => '(27) 98765-4321', 'endereco' => 'Avenida das Begônias'.endDetail(), 'bairro' => 'Praia do Canto', 'cidade' => 'Vitória', 'cep' => '29000-000', 'map' => '-20.3155,-40.2922', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Marcio Lehmann Huber', 'cpf' => '00791034054', 'email' => 'marcio.huber@sistemapdv.com', 'telefone' => '(85) 98765-4321', 'endereco' => 'Rua das Rosas'.endDetail(), 'bairro' => 'Aldeota', 'cidade' => 'Fortaleza', 'cep' => '60000-000', 'map' => '-3.7172,-38.5433', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Fernanda Kaiser Fuchs', 'cpf' => '95405448079', 'email' => 'fernanda.fuchs@sistemapdv.com', 'telefone' => '(84) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.endDetail(), 'bairro' => 'Tirol', 'cidade' => 'Natal', 'cep' => '59000-000', 'map' => '-5.7945,-35.2120', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Rafael Peters Haas', 'cpf' => '38576265001', 'email' => 'rafael.haas@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Gabriela Schuster Engel', 'cpf' => '87767507017', 'email' => 'gabriela.engel@sistemapdv.com', 'telefone' => '(91) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Nazaré', 'cidade' => 'Belém', 'cep' => '66000-000', 'map' => '-1.4579,-48.5034', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Carlos Walter Vogel', 'cpf' => '07282733066', 'email' => 'carlos.vogel@sistemapdv.com', 'telefone' => '(68) 98765-4321', 'endereco' => 'Rua das Orquídeas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Rio Branco', 'cep' => '69900-000', 'map' => '-9.9718,-67.8076', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Aline Otto Simon', 'cpf' => '25916691041', 'email' => 'aline.simon@sistemapdv.com', 'telefone' => '(16) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Ribeirão Preto', 'cep' => '14000-000', 'map' => '-21.1703,-47.8099', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Roberto Günther Keller', 'cpf' => '24747418016', 'email' => 'roberto.keller@sistemapdv.com', 'telefone' => '(95) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Boa Vista', 'cep' => '69300-000', 'map' => '2.8220,-60.6695', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Mariana Frank Berger', 'cpf' => '54195035066', 'email' => 'mariana.berger@sistemapdv.com', 'telefone' => '(32) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Juiz de Fora', 'cep' => '36000-000', 'map' => '-21.7627,-43.3431', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Rodrigo Roth Meier', 'cpf' => '93514732019', 'email' => 'rodrigo.meier@sistemapdv.com', 'telefone' => '(49) 98765-4321', 'endereco' => 'Rua das Orquídeas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Chapecó', 'cep' => '89800-000', 'map' => '-27.1002,-52.6152', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Patricia Geiger Sauer', 'cpf' => '26217807092', 'email' => 'patricia.sauer@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Avenida das Begônias'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Thiago Dietrich Schreiber', 'cpf' => '94442114013', 'email' => 'thiago.schreiber@sistemapdv.com', 'telefone' => '(98) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Ponta do Farol', 'cidade' => 'São Luís', 'cep' => '65000-000', 'map' => '-2.5326,-44.2663', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Letícia Bender Krause', 'cpf' => '18954563040', 'email' => 'leticia.krause@sistemapdv.com', 'telefone' => '(12) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'São José dos Campos', 'cep' => '12000-000', 'map' => '-23.1806,-45.8840', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Gabriel Brandt Winkler', 'cpf' => '18954563040', 'email' => 'gabriel.winkler@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Rua das Rosas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Raquel Roth Vetter', 'cpf' => '60506440044', 'email' => 'raquel.vetter@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Marcelo Nowak Heinz', 'cpf' => '80073292001', 'email' => 'marcelo.heinz@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Beatriz Müller Schmidt', 'cpf' => '78833517020', 'email' => 'beatriz.schmidt@sistemapdv.com', 'telefone' => '(41) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Batel', 'cidade' => 'Curitiba', 'cep' => '80000-000', 'map' => '-25.4322,-49.2722', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Diego Schneider Fischer', 'cpf' => '91818636085', 'email' => 'diego.fischer@sistemapdv.com', 'telefone' => '(31) 98765-4321', 'endereco' => 'Rua dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Belo Horizonte', 'cep' => '30000-000', 'map' => '-19.9386,-43.9379', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Juliana Wagner Becker', 'cpf' => '77295220046', 'email' => 'juliana.becker@sistemapdv.com', 'telefone' => '(61) 98765-4321', 'endereco' => 'Avenida dos Cravos'.endDetail(), 'bairro' => 'Asa Sul', 'cidade' => 'Brasília', 'cep' => '70000-000', 'map' => '-15.7936,-47.8825', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Douglas Hoffmann Schäfer', 'cpf' => '33970764041', 'email' => 'douglas.schaefer@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Rua das Rosas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Renata Koch Richter', 'cpf' => '64730050053', 'email' => 'renata.richter@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.endDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Vinícius Bauer Klein', 'cpf' => '00845741004', 'email' => 'vinicius.klein@sistemapdv.com', 'telefone' => '(27) 98765-4321', 'endereco' => 'Rua das Orquídeas'.endDetail(), 'bairro' => 'Praia do Canto', 'cidade' => 'Vitória', 'cep' => '29000-000', 'map' => '-20.3155,-40.2922', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Jéssica Wolf Neumann', 'cpf' => '89953018057', 'email' => 'jessica.neumann@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Avenida dos Cravos'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Eduardo Schwarz Zimmermann', 'cpf' => '82382062002', 'email' => 'eduardo.zimmermann@sistemapdv.com', 'telefone' => '(68) 98765-4321', 'endereco' => 'Rua dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Rio Branco', 'cep' => '69900-000', 'map' => '-9.9718,-67.8076', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Amanda Braun Schmitt', 'cpf' => '93532283018', 'email' => 'amanda.schmitt@sistemapdv.com', 'telefone' => '(51) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Copacabana', 'cidade' => 'Rio de Janeiro', 'cep' => '22000-000', 'map' => '-22.9739,-43.1857', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Alan Lange Schmitz', 'cpf' => '35946184040', 'email' => 'alan.schmitz@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Bruna Krüger Schulz', 'cpf' => '62117582001', 'email' => 'bruna.schulz@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Fernando Lehmann Huber', 'cpf' => '08596919007', 'email' => 'fernando.huber@sistemapdv.com', 'telefone' => '(61) 98765-4321', 'endereco' => 'Rua das Rosas'.endDetail(), 'bairro' => 'Asa Sul', 'cidade' => 'Brasília', 'cep' => '70000-000', 'map' => '-15.7936,-47.8825', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Isabela Kaiser Fuchs', 'cpf' => '13206637023', 'email' => 'isabela.fuchs@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Avenida das Begônias'.endDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Lucas Peters Haas', 'cpf' => '57145728079', 'email' => 'lucas.haas@sistemapdv.com', 'telefone' => '(84) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Ponta do Farol', 'cidade' => 'São Luís', 'cep' => '65000-000', 'map' => '-2.5326,-44.2663', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Laura Schuster Engel', 'cpf' => '31984316036', 'email' => 'laura.engel@sistemapdv.com', 'telefone' => '(91) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.endDetail(), 'bairro' => 'Nazaré', 'cidade' => 'Belém', 'cep' => '66000-000', 'map' => '-1.4579,-48.5034', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Adriano Walter Vogel', 'cpf' => '30355484048', 'email' => 'adriano.vogel@sistemapdv.com', 'telefone' => '(68) 98765-4321', 'endereco' => 'Rua das Orquídeas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Rio Branco', 'cep' => '69900-000', 'map' => '-9.9718,-67.8076', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Caroline Otto Simon', 'cpf' => '62873212020', 'email' => 'caroline.simon@sistemapdv.com', 'telefone' => '(16) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Ribeirão Preto', 'cep' => '14000-000', 'map' => '-21.1703,-47.8099', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'André Günther Keller', 'cpf' => '11265615098', 'email' => 'andre.keller@sistemapdv.com', 'telefone' => '(95) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Boa Vista', 'cep' => '69300-000', 'map' => '2.8220,-60.6695', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Valéria Frank Berger', 'cpf' => '39411795005', 'email' => 'valeria.berger@sistemapdv.com', 'telefone' => '(32) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Juiz de Fora', 'cep' => '36000-000', 'map' => '-21.7627,-43.3431', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Gustavo Roth Meier', 'cpf' => '66760091027', 'email' => 'gustavo.meier@sistemapdv.com', 'telefone' => '(49) 98765-4321', 'endereco' => 'Rua das Orquídeas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Chapecó', 'cep' => '89800-000', 'map' => '-27.1002,-52.6152', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Camila Geiger Sauer', 'cpf' => '70177308010', 'email' => 'camila.sauer@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Avenida das Begônias'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Leandro Dietrich Schreiber', 'cpf' => '37817752087', 'email' => 'leandro.schreiber@sistemapdv.com', 'telefone' => '(98) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Nathalia Bender Krause', 'cpf' => '55050524016', 'email' => 'nathalia.krause@sistemapdv.com', 'telefone' => '(12) 98765-4321', 'endereco' => 'Avenida dos Lírios'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'São José dos Campos', 'cep' => '12000-000', 'map' => '-23.1806,-45.8840', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Guilherme Brandt Winkler', 'cpf' => '80303899069', 'email' => 'guilherme.winkler@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Rua das Rosas'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Ana Clara Roth Vetter', 'cpf' => '23490620070', 'email' => 'anaclara.vetter@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Raul Nowak Heinz', 'cpf' => '56757487098', 'email' => 'raul.heinz@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Rua dos Cravos'.endDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
-			['nome' => 'Júlia Müller Schmidt', 'cpf' => '12977356096', 'email' => 'julia.schmidt@sistemapdv.com', 'telefone' => '(41) 98765-4321', 'endereco' => 'Avenida das Acácias'.endDetail(), 'bairro' => 'Batel', 'cidade' => 'Curitiba', 'cep' => '80000-000', 'map' => '-25.4322,-49.2722', 'created_at' => now(), 'updated_at' => now()],
+        	['nome' => 'João Müller Schmidt', 'cpf' => '78420702021', 'email' => 'joao.schmidt@sistemapdv.com', 'telefone' => '(11) 98765-4321', 'endereco' => 'Rua das Moças'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'São Paulo', 'cep' => '01000-000', 'map' => '-23.5505,-46.6333', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Maria Schneider Fischer', 'cpf' => '98102323060', 'email' => 'maria.fischer@sistemapdv.com', 'telefone' => '(21) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Copacabana', 'cidade' => 'Rio de Janeiro', 'cep' => '22000-000', 'map' => '-22.9739,-43.1857', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'José Weber Meyer', 'cpf' => '05848809011', 'email' => 'jose.meyer@sistemapdv.com', 'telefone' => '(51) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Porto Alegre', 'cep' => '90000-000', 'map' => '-30.0330,-51.2300', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Ana Wagner Becker', 'cpf' => '38702929031', 'email' => 'ana.becker@sistemapdv.com', 'telefone' => '(41) 98765-4321', 'endereco' => 'Avenida das Begônias'.gerarEndDetail(), 'bairro' => 'Batel', 'cidade' => 'Curitiba', 'cep' => '80000-000', 'map' => '-25.4322,-49.2722', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Francisco Hoffmann Schäfer', 'cpf' => '22288198087', 'email' => 'francisco.schaefer@sistemapdv.com', 'telefone' => '(48) 98765-4321', 'endereco' => 'Rua das Rosas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Florianópolis', 'cep' => '88000-000', 'map' => '-27.5954,-48.5480', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Paula Koch Richter', 'cpf' => '59766500070', 'email' => 'paula.richter@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Luiz Bauer Klein', 'cpf' => '49217402087', 'email' => 'luiz.klein@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Rua das Violetas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Carla Wolf Neumann', 'cpf' => '61400535018', 'email' => 'carla.neumann@sistemapdv.com', 'telefone' => '(31) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.gerarEndDetail(), 'bairro' => 'Savassi', 'cidade' => 'Belo Horizonte', 'cep' => '30000-000', 'map' => '-19.9386,-43.9379', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Antonio Schwarz Zimmermann', 'cpf' => '97961788000', 'email' => 'antonio.zimmermann@sistemapdv.com', 'telefone' => '(61) 98765-4321', 'endereco' => 'Rua das Orquídeas'.gerarEndDetail(), 'bairro' => 'Asa Sul', 'cidade' => 'Brasília', 'cep' => '70000-000', 'map' => '-15.7936,-47.8825', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Renata Braun Schmitt', 'cpf' => '90110695011', 'email' => 'renata.schmitt@sistemapdv.com', 'telefone' => '(67) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Campo Grande', 'cep' => '79000-000', 'map' => '-20.4509,-54.6163', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Pedro Lange Schmitz', 'cpf' => '02383090026', 'email' => 'pedro.schmitz@sistemapdv.com', 'telefone' => '(24) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Petrópolis', 'cep' => '25600-000', 'map' => '-22.5100,-43.1808', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Camila Krüger Schulz', 'cpf' => '22672529027', 'email' => 'camila.schulz@sistemapdv.com', 'telefone' => '(27) 98765-4321', 'endereco' => 'Avenida das Begônias'.gerarEndDetail(), 'bairro' => 'Praia do Canto', 'cidade' => 'Vitória', 'cep' => '29000-000', 'map' => '-20.3155,-40.2922', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Marcio Lehmann Huber', 'cpf' => '00791034054', 'email' => 'marcio.huber@sistemapdv.com', 'telefone' => '(85) 98765-4321', 'endereco' => 'Rua das Rosas'.gerarEndDetail(), 'bairro' => 'Aldeota', 'cidade' => 'Fortaleza', 'cep' => '60000-000', 'map' => '-3.7172,-38.5433', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Fernanda Kaiser Fuchs', 'cpf' => '95405448079', 'email' => 'fernanda.fuchs@sistemapdv.com', 'telefone' => '(84) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.gerarEndDetail(), 'bairro' => 'Tirol', 'cidade' => 'Natal', 'cep' => '59000-000', 'map' => '-5.7945,-35.2120', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Rafael Peters Haas', 'cpf' => '38576265001', 'email' => 'rafael.haas@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Gabriela Schuster Engel', 'cpf' => '87767507017', 'email' => 'gabriela.engel@sistemapdv.com', 'telefone' => '(91) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Nazaré', 'cidade' => 'Belém', 'cep' => '66000-000', 'map' => '-1.4579,-48.5034', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Carlos Walter Vogel', 'cpf' => '07282733066', 'email' => 'carlos.vogel@sistemapdv.com', 'telefone' => '(68) 98765-4321', 'endereco' => 'Rua das Orquídeas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Rio Branco', 'cep' => '69900-000', 'map' => '-9.9718,-67.8076', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Aline Otto Simon', 'cpf' => '25916691041', 'email' => 'aline.simon@sistemapdv.com', 'telefone' => '(16) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Ribeirão Preto', 'cep' => '14000-000', 'map' => '-21.1703,-47.8099', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Roberto Günther Keller', 'cpf' => '24747418016', 'email' => 'roberto.keller@sistemapdv.com', 'telefone' => '(95) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Boa Vista', 'cep' => '69300-000', 'map' => '2.8220,-60.6695', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Mariana Frank Berger', 'cpf' => '54195035066', 'email' => 'mariana.berger@sistemapdv.com', 'telefone' => '(32) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Juiz de Fora', 'cep' => '36000-000', 'map' => '-21.7627,-43.3431', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Rodrigo Roth Meier', 'cpf' => '93514732019', 'email' => 'rodrigo.meier@sistemapdv.com', 'telefone' => '(49) 98765-4321', 'endereco' => 'Rua das Orquídeas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Chapecó', 'cep' => '89800-000', 'map' => '-27.1002,-52.6152', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Patricia Geiger Sauer', 'cpf' => '26217807092', 'email' => 'patricia.sauer@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Avenida das Begônias'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Thiago Dietrich Schreiber', 'cpf' => '94442114013', 'email' => 'thiago.schreiber@sistemapdv.com', 'telefone' => '(98) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Ponta do Farol', 'cidade' => 'São Luís', 'cep' => '65000-000', 'map' => '-2.5326,-44.2663', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Letícia Bender Krause', 'cpf' => '18954563040', 'email' => 'leticia.krause@sistemapdv.com', 'telefone' => '(12) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'São José dos Campos', 'cep' => '12000-000', 'map' => '-23.1806,-45.8840', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Gabriel Brandt Winkler', 'cpf' => '18954563040', 'email' => 'gabriel.winkler@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Rua das Rosas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Raquel Roth Vetter', 'cpf' => '60506440044', 'email' => 'raquel.vetter@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Marcelo Nowak Heinz', 'cpf' => '80073292001', 'email' => 'marcelo.heinz@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Beatriz Müller Schmidt', 'cpf' => '78833517020', 'email' => 'beatriz.schmidt@sistemapdv.com', 'telefone' => '(41) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Batel', 'cidade' => 'Curitiba', 'cep' => '80000-000', 'map' => '-25.4322,-49.2722', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Diego Schneider Fischer', 'cpf' => '91818636085', 'email' => 'diego.fischer@sistemapdv.com', 'telefone' => '(31) 98765-4321', 'endereco' => 'Rua dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Belo Horizonte', 'cep' => '30000-000', 'map' => '-19.9386,-43.9379', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Juliana Wagner Becker', 'cpf' => '77295220046', 'email' => 'juliana.becker@sistemapdv.com', 'telefone' => '(61) 98765-4321', 'endereco' => 'Avenida dos Cravos'.gerarEndDetail(), 'bairro' => 'Asa Sul', 'cidade' => 'Brasília', 'cep' => '70000-000', 'map' => '-15.7936,-47.8825', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Douglas Hoffmann Schäfer', 'cpf' => '33970764041', 'email' => 'douglas.schaefer@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Rua das Rosas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Renata Koch Richter', 'cpf' => '64730050053', 'email' => 'renata.richter@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.gerarEndDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Vinícius Bauer Klein', 'cpf' => '00845741004', 'email' => 'vinicius.klein@sistemapdv.com', 'telefone' => '(27) 98765-4321', 'endereco' => 'Rua das Orquídeas'.gerarEndDetail(), 'bairro' => 'Praia do Canto', 'cidade' => 'Vitória', 'cep' => '29000-000', 'map' => '-20.3155,-40.2922', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Jéssica Wolf Neumann', 'cpf' => '89953018057', 'email' => 'jessica.neumann@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Avenida dos Cravos'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Eduardo Schwarz Zimmermann', 'cpf' => '82382062002', 'email' => 'eduardo.zimmermann@sistemapdv.com', 'telefone' => '(68) 98765-4321', 'endereco' => 'Rua dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Rio Branco', 'cep' => '69900-000', 'map' => '-9.9718,-67.8076', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Amanda Braun Schmitt', 'cpf' => '93532283018', 'email' => 'amanda.schmitt@sistemapdv.com', 'telefone' => '(51) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Copacabana', 'cidade' => 'Rio de Janeiro', 'cep' => '22000-000', 'map' => '-22.9739,-43.1857', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Alan Lange Schmitz', 'cpf' => '35946184040', 'email' => 'alan.schmitz@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Bruna Krüger Schulz', 'cpf' => '62117582001', 'email' => 'bruna.schulz@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Fernando Lehmann Huber', 'cpf' => '08596919007', 'email' => 'fernando.huber@sistemapdv.com', 'telefone' => '(61) 98765-4321', 'endereco' => 'Rua das Rosas'.gerarEndDetail(), 'bairro' => 'Asa Sul', 'cidade' => 'Brasília', 'cep' => '70000-000', 'map' => '-15.7936,-47.8825', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Isabela Kaiser Fuchs', 'cpf' => '13206637023', 'email' => 'isabela.fuchs@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Avenida das Begônias'.gerarEndDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Lucas Peters Haas', 'cpf' => '57145728079', 'email' => 'lucas.haas@sistemapdv.com', 'telefone' => '(84) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Ponta do Farol', 'cidade' => 'São Luís', 'cep' => '65000-000', 'map' => '-2.5326,-44.2663', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Laura Schuster Engel', 'cpf' => '31984316036', 'email' => 'laura.engel@sistemapdv.com', 'telefone' => '(91) 98765-4321', 'endereco' => 'Avenida dos Girassóis'.gerarEndDetail(), 'bairro' => 'Nazaré', 'cidade' => 'Belém', 'cep' => '66000-000', 'map' => '-1.4579,-48.5034', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Adriano Walter Vogel', 'cpf' => '30355484048', 'email' => 'adriano.vogel@sistemapdv.com', 'telefone' => '(68) 98765-4321', 'endereco' => 'Rua das Orquídeas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Rio Branco', 'cep' => '69900-000', 'map' => '-9.9718,-67.8076', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Caroline Otto Simon', 'cpf' => '62873212020', 'email' => 'caroline.simon@sistemapdv.com', 'telefone' => '(16) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Ribeirão Preto', 'cep' => '14000-000', 'map' => '-21.1703,-47.8099', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'André Günther Keller', 'cpf' => '11265615098', 'email' => 'andre.keller@sistemapdv.com', 'telefone' => '(95) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Boa Vista', 'cep' => '69300-000', 'map' => '2.8220,-60.6695', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Valéria Frank Berger', 'cpf' => '39411795005', 'email' => 'valeria.berger@sistemapdv.com', 'telefone' => '(32) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Juiz de Fora', 'cep' => '36000-000', 'map' => '-21.7627,-43.3431', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Gustavo Roth Meier', 'cpf' => '66760091027', 'email' => 'gustavo.meier@sistemapdv.com', 'telefone' => '(49) 98765-4321', 'endereco' => 'Rua das Orquídeas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Chapecó', 'cep' => '89800-000', 'map' => '-27.1002,-52.6152', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Camila Geiger Sauer', 'cpf' => '70177308010', 'email' => 'camila.sauer@sistemapdv.com', 'telefone' => '(14) 98765-4321', 'endereco' => 'Avenida das Begônias'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Bauru', 'cep' => '17000-000', 'map' => '-22.3246,-49.0880', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Leandro Dietrich Schreiber', 'cpf' => '37817752087', 'email' => 'leandro.schreiber@sistemapdv.com', 'telefone' => '(98) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Nathalia Bender Krause', 'cpf' => '55050524016', 'email' => 'nathalia.krause@sistemapdv.com', 'telefone' => '(12) 98765-4321', 'endereco' => 'Avenida dos Lírios'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'São José dos Campos', 'cep' => '12000-000', 'map' => '-23.1806,-45.8840', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Guilherme Brandt Winkler', 'cpf' => '80303899069', 'email' => 'guilherme.winkler@sistemapdv.com', 'telefone' => '(54) 98765-4321', 'endereco' => 'Rua das Rosas'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Caxias do Sul', 'cep' => '95000-000', 'map' => '-29.1670,-51.1794', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Ana Clara Roth Vetter', 'cpf' => '23490620070', 'email' => 'anaclara.vetter@sistemapdv.com', 'telefone' => '(55) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Centro', 'cidade' => 'Santa Maria', 'cep' => '97000-000', 'map' => '-29.6881,-53.8265', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Raul Nowak Heinz', 'cpf' => '56757487098', 'email' => 'raul.heinz@sistemapdv.com', 'telefone' => '(92) 98765-4321', 'endereco' => 'Rua dos Cravos'.gerarEndDetail(), 'bairro' => 'Adrianópolis', 'cidade' => 'Manaus', 'cep' => '69000-000', 'map' => '-3.0969,-60.0188', 'created_at' => now(), 'updated_at' => now()],
+			['nome' => 'Júlia Müller Schmidt', 'cpf' => '12977356096', 'email' => 'julia.schmidt@sistemapdv.com', 'telefone' => '(41) 98765-4321', 'endereco' => 'Avenida das Acácias'.gerarEndDetail(), 'bairro' => 'Batel', 'cidade' => 'Curitiba', 'cep' => '80000-000', 'map' => '-25.4322,-49.2722', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // Inserir dados na tabela 'categorias'
@@ -225,5 +335,15 @@ class BKP_Teste_Seeder extends Seeder
 			['produto_id' => 51, 'categoria_id' => 5],
 			['produto_id' => 52, 'categoria_id' => 5],
 	    ]);
+
+	    // Inserir dados na tabela 'forncedores'        
+			$fornecedores='';
+			for ($i = 0; $i < 54; $i++) {
+				$fornNome = gerarNomeAleatorio();
+				DB::table('fornecedores')->insert([
+					['nome' => $fornNome, 'cnpj' => gerarCNPJAleatorio(), 'email' => gerarEmailAleatorio($fornNome), 'telefone' => gerarTelefoneAleatorio(), 'endereco' => gerarEnderecoAleatorio(), 'bairro' => gerarBairroAleatorio(), 'cidade' => gerarCidadeAleatoria(), 'cep' => gerarCEPAleatorio(), 'created_at' => now(), 'updated_at' => now()],
+				]);
+
+			}
     }
 }
