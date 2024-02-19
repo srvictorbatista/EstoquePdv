@@ -18,10 +18,17 @@ class Compra extends Model
     {
     	return $this->hasMany(ItemCempra::class);
     }
-
-    /*
-    public function fornecedor()
+    
+    public function relCompraProdutos()
     {
-    	return $this->belongsTo(Cliente::class);
-    } /**/
+        return $this->belongsToMany(Produto::class, 'rel_compra_produto')
+            ->withPivot('quantidade', 'preco_unitario')
+            ->withTimestamps();
+    }
+
+    public function relCompraFornecedor()
+    {
+        return $this->belongsTo(Fornecedor::class, 'fornecedor_id');
+    }
+
 }
