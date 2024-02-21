@@ -30,13 +30,61 @@ function gerarNomeAleatorio() {
     return $nome;
 }
 
+// Gera CNPJs aleatorios. Porém, válidos
+function gerarCNPJAleatorio($mask=0) {
+    $DV01 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    $DV02 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    $cnpj = "";
+    for ($i = 0; $i < 14; $i++): $cnpj .= ($i > 7 && $i < 11) ? '0' : (($i == 11) ? '1' : rand(0, 9)); endfor;
+    $gerNum = str_split($cnpj);
+    $i = count($gerNum) - 2;
+    $y = count($gerNum) - 1;
 
-function gerarCNPJAleatorio() {
-    $cnpj = '';
-    for ($i = 0; $i < 14; $i++) {
-        $cnpj .= mt_rand(0, 9);
-    }
-    return $cnpj;
+    $total[]=0;$total[]=0;$resul[]=0;$resul[]=0;
+    for ($j = 0; $j < count($DV01); $j++): $resul[0] += ($gerNum[$j] * $DV01[$j]); endfor;
+    $rest[0] = ($resul[0] % 11);
+    $check[0] =  $rest[0] < 2 ? 0 : $rest[0];
+    $total[0] = $check[0] == 0 ? $check[0] : abs(11 - $rest[0]);
+
+    $gerNum[$i] = $total[0];
+    for ($k = 0; $k < count($DV02); $k++): $resul[1] += ($gerNum[$k] * $DV02[$k]); endfor;
+    $rest[1] = ($resul[1] % 11);
+    $check[1] =  $rest[1] < 2 ? 0 : $rest[1];
+    $total[1] = $check[1] == 0 ? $check[1] : abs(11 - $rest[1]);
+    $gerNum[$y] = $total[1];
+    $value =  count(array_unique($gerNum));
+    
+    // return $value <= 1 ? "err-cnpj" : implode($gerNum);
+    // return $value <= 1 ? "err-cnpj" : vsprintf("%s%s.%s%s%s.%s%s%s/%s%s%s%s-%s%s", $gerNum);
+    return $value >= 1 ?     	$mask==0 ? implode($gerNum):     	vsprintf("%s%s.%s%s%s.%s%s%s/%s%s%s%s-%s%s", $gerNum): "err-cnpj";
+} 
+
+// Gera CPFs aleatorios. Porém, válidos
+function gerarCPFAleatorio($mask=0)
+{
+    $DV01 = [10, 9, 8, 7, 6, 5, 4, 3, 2];
+    $DV02 = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+    $cpf = "";
+    for ($i = 0; $i < 11; $i++): $cpf .= rand(0, 9); endfor;
+    $gerNum = str_split($cpf);
+    $i = count($gerNum) - 2;
+    $y = count($gerNum) - 1;
+
+    $total[]=0;$total[]=0;$resul[]=0;$resul[]=0;
+    for ($j = 0; $j < count($DV01); $j++): $resul[0] += ($gerNum[$j] * $DV01[$j]); endfor;
+    $rest[0] = ($resul[0] % 11);
+    $check[0] = $rest[0] < 2 ? 0 : $rest[0];
+    $total[0] = $check[0] == 0 ? $check[0] : abs(11 - $rest[0]);
+
+    $gerNum[$i] = $total[0];
+    for ($k = 0; $k < count($DV02); $k++): $resul[1] += ($gerNum[$k] * $DV02[$k]); endfor;
+    $rest[1] = ($resul[1] % 11);
+    $check[1] = $rest[1] < 2 ? 0 : $rest[1];
+    $total[1] = $check[1] == 0 ? $check[1] : abs(11 - $rest[1]);
+    $gerNum[$y] = $total[1];
+    $value = count(array_unique($gerNum));
+
+    return $value >= 1 ?     	$mask==0 ? implode($gerNum):     	vsprintf("%s%s%s.%s%s%s.%s%s%s-%s%s", $gerNum): "err-cpf";
 }
 
 function gerarEmailAleatorio($nome='') {
