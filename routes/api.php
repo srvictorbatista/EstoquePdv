@@ -8,6 +8,7 @@ use App\Http\Controllers\VendaController;
 use App\Http\Controllers\ItemVendaController;
 use App\Http\Controllers\CLienteController;
 use App\Http\Controllers\FornecedorController;
+use App\Http\Controllers\CompraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,12 @@ Route::delete('clie/{id}', 	[ClienteController::class, 	'destroy']);
 Route::get('forn', 			[FornecedorController::class, 	'index']);
 Route::post('forn', 		[FornecedorController::class, 	'store']);
 Route::get('forn/{id}', 	[FornecedorController::class, 	'show']);
-// Route::resource('fornecedores', FornecedorController::class);
 Route::put('forn/{id}', 	[FornecedorController::class, 	'update']);
 Route::delete('forn/{id}', 	[FornecedorController::class, 	'destroy']);
 
+
+Route::get('comp', 			[CompraController::class, 	'index']);
+Route::post('comp', 		[CompraController::class, 	'store']);
+Route::get('comp/{id}', 	[CompraController::class, 	'show']);
+Route::put('comp/{id}', 	[CompraController::class, 	'update']);
+Route::delete('comp/{id}', 	[CompraController::class, 	'destroy']);

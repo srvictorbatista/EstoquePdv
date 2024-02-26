@@ -134,10 +134,9 @@ class VendaController extends Controller
                         }
 
                         // A quantidade minima é 1
-                        if (!isset($dados_venda['quantidade'][$i]) || empty($dados_venda['quantidade'][$i]) || $dados_venda['quantidade'][$i] < 1) {
-                            $dados_venda['quantidade'][$i] = "1";
-                        }
-
+                        // $dados_venda['quantidade'][$i] = isset($dados_venda['quantidade'][$i]) && $dados_venda['quantidade'][$i] >= 1 ? $dados_venda['quantidade'][$i] : "1";
+                        $dados_venda['quantidade'][$i] = max(1, $dados_venda['quantidade'][$i] ?? 1);
+                        
                         // Calcula subtotal com base nos valores e quantidades
                         if (isset($dados_venda['quantidade'][$i]) && isset($dados_venda['preco_unitario'][$i])) {
                              $dados_venda['subtotal'][$i] = number_format(  $dados_venda['quantidade'][$i] * $dados_venda['preco_unitario'][$i], 2, '.', '');

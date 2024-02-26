@@ -9,26 +9,51 @@ class Compra extends Model
 {
     use HasFactory;
     // protected $table = 'compra'; // já ligado a tabela compra    
-    protected $fillable = ['id','data','total'];
+    protected $fillable = [
+    	'id',
+    	'data',
+    	'total'
+    ];
 
 
     //-- -------- Relacionamentos ----------------------------------------------------------------
 
     public function itensCompra()
     {
-    	return $this->hasMany(ItemCempra::class);
+    	//return $this->hasMany(ItemCompra::class);
+    	return $this->hasMany(ItemCompra::class, 'compra_id');
     }
-    
-    public function relCompraProdutos()
+
+    public function itensCompraU()
     {
-        return $this->belongsToMany(Produto::class, 'rel_compra_produto')
-            ->withPivot('quantidade', 'preco_unitario')
-            ->withTimestamps();
+        //*
+        return $this->belongsToMany(Produto::class, 'item_compras')
+            ->withPivot('compra_id')
+            ->withPivot('created_at')
+            ->withPivot('updated_at'); /**/
+
+	    /*
+	    return $this->belongsToMany(Produto::class, 'rel_venda_produto', 'venda_id', 'produto_id')
+	        ->withPivot('quantidade', 'preco_unitario', 'subtotal')
+	        ->withTimestamps();/**/
+    }
+
+    public function Fornecedores()
+    {
+        return $this->belongsToMany(Fornecedor::class, 'rel_compra_fornecedor', 'compra_id', 'fornecedor_id')->withTimestamps();
     }
 
     public function relCompraFornecedor()
     {
-        return $this->belongsTo(Fornecedor::class, 'fornecedor_id');
+        // return $this->belongsTo(Fornecedor::class, 'fornecedor_id');
+        return $this->belongsToMany(Fornecedor::class, 'rel_compra_fornecedor', 'compra_id', 'fornecedor_id')->withTimestamps();
+    }
+    
+    public function relCompraProdutos()
+    {
+        return $this->belongsToMany(Produto::class, 'item_compras', 'compra_id', 'produto_id')
+            ->withPivot('quantidade', 'preco_unitario')
+            ->withTimestamps();
     }
 
 }

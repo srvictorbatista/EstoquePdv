@@ -19,7 +19,6 @@ return new class extends Migration
         });
         // Definindo o valor padrão para a coluna 'data' se estiver vazia
         DB::statement("ALTER TABLE vendas MODIFY data DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
-   
     }
 
     /**

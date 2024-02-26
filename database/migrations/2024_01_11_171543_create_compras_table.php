@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
-            $table->date('data');
+            $table->dateTime('data')->nullable(); // Certifique-se de permitir valores nulos
             $table->decimal('total', 10, 2);
             $table->timestamps();
         });
+        // Definindo o valor padrão para a coluna 'data' se estiver vazia
+        DB::statement("ALTER TABLE compras MODIFY data DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
     }
 
     /**

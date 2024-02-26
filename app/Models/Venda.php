@@ -23,6 +23,7 @@ class Venda extends Model
     	// return $this->hasMany(ItemVenda::class, 'item_vendas');        // n para n (inverso)
         return $this->hasMany(ItemVenda::class, 'venda_id');
     }
+    
     public function itensVendaU()
     {
         return $this->belongsToMany(Produto::class, 'item_vendas')
