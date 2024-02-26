@@ -1,6 +1,5 @@
-@echo off &COLOR 0A
 :menu
-cls
+@echo off &COLOR 0A &cls
 mode con: cols=48 lines=15
 echo.     #####################################
 echo.     #       MENU DE OPCOES ARTISAN      #&TITLE MENU DE OPCOES
@@ -37,11 +36,12 @@ if %opcao% equ 1 (
 goto menu
 
 :monitorarLog
+start "" "%~dpnx0"
 :repeat
-cls &mode con: cols=200 lines=50
+cls &mode con: cols=200 lines=60
 echo.  Monitorando Logs...   &TITLE MONITORANDO LOGs
-type storage\logs\laravel.log
-timeout /nobreak /t 3 >nul
+type storage\logs\laravel.log 
+timeout /nobreak /t 5 >nul 
 goto repeat
 
 :limparLog
@@ -54,11 +54,13 @@ timeout /nobreak /t 5 >nul
 goto menu
 
 :runar_server_acessoexterno
+start "" "%~dpnx0"
 echo. Levantando server para acesso externo...
 @ECHO OFF &TITLE Server is running &mode con: cols=100 lines=5 &php artisan serve --host=0.0.0.0 --port=8000 &exit
 
 
 :runar_server_acessointerno
+start "" "%~dpnx0"
 echo. Levantando server padrao...
 @ECHO OFF &TITLE Server is running &mode con: cols=100 lines=5 &php artisan serve &exit
 

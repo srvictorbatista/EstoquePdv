@@ -22,11 +22,11 @@ class StoreItemVendaRequest extends FormRequest
     public function rules(): array
     {
         return [
-           'venda_id' => 'required|numeric|min:1',
-           'produto_id' => 'required|numeric|min:1',
-           'quantidade' => 'nullable|numeric|min:0',
+           'venda_id'       => 'required|numeric|min:1',
+           'produto_id'     => 'required|numeric|min:1',
+           'quantidade'     => 'nullable|numeric|min:0',
            'preco_unitario' => 'nullable|string|min:0', 
-           'subtotal' => 'numeric|min:0',
+           'subtotal'       => 'numeric|min:0',
         ];
     }
 }
