@@ -20,4 +20,18 @@ class RelVendaCliente extends Model
         // belongsToMany
         return $this->belongsTo(Cliente::class, 'cliente_id', 'id');
     }
+
+    //* Padroniza data no modelo (fuso horário)
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        foreach ($this->getDates() as $date) {
+            if (isset($array[$date])) {
+                $array[$date] = $this->$date->setTimezone('America/Belem')->toDateTimeString();
+            }
+        }
+
+        return $array;
+    }
 }

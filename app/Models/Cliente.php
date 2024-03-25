@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     use HasFactory;
-    // protected $table = 'venda'; // já ligado a tabela venda  
+    // protected $table = 'clientes'; // já ligado a tabela clientes  
     protected $fillable = ['id','nome', 'cpf', 'email', 'telefone', 'endereco','bairro','cidade','cep', 'map'];
     protected $dates = ['created_at', 'updated_at']; // Padroniza data no modelo (fusorario)
 

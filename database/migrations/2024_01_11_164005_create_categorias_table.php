@@ -26,7 +26,13 @@ return new class extends Migration
 
         // Atualiza o valor inicial do ID para 0
         Schema::table('categorias', function ($table) {
-            DB::statement('ALTER TABLE categorias AUTO_INCREMENT = 0;');
+            DB::statement('
+                ALTER TABLE categorias AUTO_INCREMENT = 0,
+
+                -- Adição devido à falta de funcionamento padrão da função timestamps(), especificamente nesta tabela.
+                MODIFY COLUMN created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                MODIFY COLUMN updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+            ');
         });
     }
 

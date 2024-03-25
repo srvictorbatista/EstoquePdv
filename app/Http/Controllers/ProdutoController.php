@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produto;
+use App\Models\Categoria;
 use App\Http\Requests\ProdutoRequest;
 use App\Http\Resources\ProdutoResource;
 
@@ -15,7 +16,8 @@ class ProdutoController extends Controller
     public function index()
     {
         $produtos = Produto::all();
-        return ProdutoResource::collection($produtos);
+        return response()->json(['message'=>'sucesso', 'produtos' => ProdutoResource::collection($produtos)], 202);
+        // return ProdutoResource::collection($produtos);
     }
     /**
      * Store a newly created resource in storage.
@@ -33,7 +35,7 @@ class ProdutoController extends Controller
             }
         }
 
-        return response()->json(['message'=>'inserido com sucesso', new ProdutoResource($produto)], 202);
+        return response()->json(['message'=>'inserido com sucesso', 'produto' => new ProdutoResource($produto)], 202);
     }
     /**
      * Display the specified resource.
@@ -41,8 +43,37 @@ class ProdutoController extends Controller
     public function show(string $id)
     {
         $produto = Produto::findOrFail($id);
-        return new ProdutoResource($produto);
+        return response()->json(['message'=>'sucesso', 'produto' => new ProdutoResource($produto)], 202);
     }
+
+    // Listar produtos pelo ID da categoria
+    public function showByCategory(string $request)
+    { 
+        $categoria_ids = array_filter(array_map('intval', explode(',', $request)));
+
+        if (empty($categoria_ids)) {
+            return response()->json(['error' => 'Pelo menos uma categoria deve ser especificada.'], 400); 
+        }
+
+        $categorias = Categoria::whereIn('id', $categoria_ids)->pluck('nome')->toArray();
+
+        $nome_categorias = implode(' | ', $categorias);
+
+        $produtos = Produto::whereHas('categorias', function ($query) use ($categoria_ids) {
+            $query->whereIn('categoria_id', $categoria_ids);
+        })->get();
+
+        if ($produtos->isEmpty()) {
+            return response()->json(['error' => "Nenhum produto encontrado na(s) categoria(s): $nome_categorias"], 404);
+        }
+
+        if(count($categorias)>1){
+            return response()->json(['message' => "Categorias: $nome_categorias", 'produtos' => ProdutoResource::collection($produtos)], 200);
+        }else{
+            return response()->json(['message' => "Categoria: $nome_categorias", 'produtos' => ProdutoResource::collection($produtos)], 200);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */
