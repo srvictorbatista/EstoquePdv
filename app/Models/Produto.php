@@ -16,6 +16,7 @@ class Produto extends Model
     	'preco',
     	'quantidade_em_estoque'
     ];
+    protected $dates = ['created_at', 'updated_at']; // Padroniza data no modelo (fusorario)
 
     //-- -------- Relacionamentos ----------------------------------------------------------------
 
@@ -27,6 +28,7 @@ class Produto extends Model
     public function categorias()
     {
     	return $this->belongsToMany(Categoria::class, 'rel_categoriaprodutos'); 		// n para n (inverso)
+        // return $this->belongsToMany(Categoria::class, 'rel_categoriaprodutos', 'produto_id', 'categoria_id');
     }
 
     public function itensVenda()
@@ -47,6 +49,20 @@ class Produto extends Model
         return $this->belongsToMany(Compra::class, 'rel_compra_produto')
             ->withPivot('quantidade', 'preco_unitario')
             ->withTimestamps();
+    }
+
+    //* Padroniza data no modelo (fuso horário)
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        foreach ($this->getDates() as $date) {
+            if (isset($array[$date])) {
+                $array[$date] = $this->$date->setTimezone('America/Belem')->toDateTimeString();
+            }
+        }
+
+        return $array;
     }
 }
 

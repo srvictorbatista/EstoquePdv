@@ -24,7 +24,9 @@ use App\Http\Controllers\CompraController;
 
 Route::get('prod', 			[ProdutoController::class, 	'index']);
 Route::post('prod', 		[ProdutoController::class, 	'store']);
+Route::get('prod/cat', 		[CategoriaController::class,'index']);
 Route::get('prod/{id}', 	[ProdutoController::class, 	'show']);
+Route::get('prod/cat/{id}', [ProdutoController::class, 	'showByCategory']);
 Route::put('prod/{id}', 	[ProdutoController::class, 	'update']);
 Route::put('prod', 			[ProdutoController::class, 	'index']);
 Route::delete('prod', 		[ProdutoController::class, 	'index']);

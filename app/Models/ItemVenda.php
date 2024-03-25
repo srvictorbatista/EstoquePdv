@@ -16,6 +16,7 @@ class ItemVenda extends Model
         'preco_unitario',
         'subtotal'
     ];
+    protected $dates = ['created_at', 'updated_at']; // Padroniza data no modelo (fusorario)
 
 
     //-- -------- Relacionamentos ----------------------------------------------------------------
@@ -30,5 +31,19 @@ class ItemVenda extends Model
     {
     	// return $this->belongsTo(Produto::class);
         return $this->belongsTo(Produto::class, 'produto_id');
+    }
+
+    //* Padroniza data no modelo (fuso horário)
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        foreach ($this->getDates() as $date) {
+            if (isset($array[$date])) {
+                $array[$date] = $this->$date->setTimezone('America/Belem')->toDateTimeString();
+            }
+        }
+
+        return $array;
     }
 }

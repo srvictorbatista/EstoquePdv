@@ -14,6 +14,7 @@ class Compra extends Model
     	'data',
     	'total'
     ];
+    protected $dates = ['created_at', 'updated_at']; // Padroniza data no modelo (fusorario)
 
 
     //-- -------- Relacionamentos ----------------------------------------------------------------
